@@ -1,17 +1,20 @@
-import { useState } from 'react'
+import { BrowserRouter } from 'react-router-dom'
+import { Suspense } from 'react'
 
-import { Button } from '@material-tailwind/react'
+// ---times
+import SpinnerSuspense from './components/Statics/Spinner'
+
+// Tailwind
+import './index.css'
+import { AppRouter } from './routes/Router'
 
 function App() {
-  //const [count, setCount] = useState(0)
-
   return (
-    <>
-      <h1 className='text-3xl font-bold underline'>Hellou Vite + React</h1>
-      <Button color="success">Es un booton elegante</Button>
-    </>
-
-
+    <BrowserRouter>
+      <Suspense fallback={ <SpinnerSuspense/> }>
+        <AppRouter />
+      </Suspense>
+    </BrowserRouter>
   )
 }
 
