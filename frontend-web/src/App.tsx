@@ -10,11 +10,13 @@ import { AppRouter } from './routes/Router'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Suspense fallback={ <SpinnerSuspense/> }>
-        <AppRouter />
-      </Suspense>
-    </BrowserRouter>
+    <div className="bg-[#0B0B13] text-white min-h-screen">
+      <BrowserRouter>
+        <Suspense fallback={<SpinnerSuspense />}>
+          <AppRouter />
+        </Suspense>
+      </BrowserRouter >
+    </div >
   )
 }
 

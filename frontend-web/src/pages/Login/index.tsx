@@ -23,9 +23,10 @@ const Login = () => {
     }
 
     return (
+        <div className="w-full min-h-screen overflow-x-hidden bg-background">
         <form
             onSubmit={handleSubmit}
-            className="max-w-md mx-auto mt-20 p-6 bg-[#0E0E10] border border-[#1f1f22] rounded-lg shadow-lg space-y-4"
+            className="max-w-md mx-auto mt-16 p-6 border border-[#1f1f22] rounded-lg shadow-lg space-y-4"
         >
             <h2 className="text-2xl font-semibold text-white text-center">Iniciar Sesión</h2>
 
@@ -58,6 +59,8 @@ const Login = () => {
                 Iniciar Sesión
             </button>
         </form>
+      </div>
+        
 
     )
 }

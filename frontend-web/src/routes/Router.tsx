@@ -1,30 +1,40 @@
 import { Route, Routes } from "react-router-dom";
 import { routesPublic, routesApp } from "./routesConfig";
 import { ProtectedRoute } from "../components/Segure/ProtectedRoute";
+import { Suspense } from 'react'
+
 
 // Value-Zustand
 import { useAuthStore } from "../store/auth";
+// My Components
+import  { AppLayout } from "../layout";
+import SpinnerSuspense from "../components/Statics/Spinner";
 
-export const AppRouter = () =>{
-    
-    const isAuth = useAuthStore((state) => state.isAuth);
+export const AppRouter = () => {
 
-    return(
-        <Routes>
-            {
-                routesPublic.map((route:any, index: number) => (
-                    <Route key={index} path={route.path} element={route.element} />
-                ))
-            }
-            <Route element={<ProtectedRoute isAllowed={isAuth} />}>
-                {
-                    routesApp.map((route:any, index: number) => (
-                        <Route key={index} path={route.path} element={route.element} />
-                    ))
-                }
-            </Route>
-        </Routes>
-    );
+  const isAuth = useAuthStore((state) => state.isAuth);
+
+  return (
+    <Routes>
+      {
+        routesPublic.map((route: any, index: number) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))
+      }
+      <Route element={<ProtectedRoute isAllowed={isAuth} />}>
+        <Route element={<AppLayout />}>
+          {
+            routesApp.map((route: any, index: number) => (
+              <Route key={index} path={route.path} element={
+                <Suspense fallback={<SpinnerSuspense />}>
+                  {route.element}
+                </Suspense>}/>
+            ))
+          }
+        </Route>
+      </Route>
+    </Routes>
+  );
 }
 
 

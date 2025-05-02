@@ -5,7 +5,7 @@ import HomePublic from './Home-public';
 export { HomePublic }
 
 // App-paginas
-export const Inicio = lazy(() => import('./Start/index.tsx'));
+export const Inicio = lazy(() => import('./Start/Inicio'));
 export const Profile = lazy(() => import('./Profile'));
 export const ReportCrimen = lazy(() => import('./ReportCrimen'));
 export const Map = lazy(() => import('./Map'));

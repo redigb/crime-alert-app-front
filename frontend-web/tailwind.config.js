@@ -10,13 +10,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#715DF2',       // Púrpura azulado
-        danger: '#FF4C4C',        // Rojo de emergencia
-        success: '#30C96F',       // Verde suave
-        accent: '#5DA6F2',        // Azul eléctrico
-        background: '#0E0E10',    // Negro grisáceo moderno
-        foreground: '#FFFFFF',    // Blanco puro
-        secondary: '#A0A0A0',     // Gris claro
+        background: "#0B0B13",
+        card: "#141421",
+        primary: "#3F37C9",
+        primaryHover: "#4B47E0",
+        alert: "#EF4444",
+        success: "#22C55E",
+        accent: "#7C3AED",
+        accentLight: "#A78BFA",
+        textSecondary: "#A0A0B0",
+
+        danger: "#FF4C4C",
+
+        background_2: "#0E0E10",
+        border_color: "#1f1f22",
       },
     },
   },
