@@ -25,6 +25,15 @@ export default {
         background_2: "#0E0E10",
         border_color: "#1f1f22",
       },
+      animation: {
+        'gradient-slow': 'gradientMove 6s ease infinite',
+      },
+      keyframes: {
+        gradientMove: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+      },
     },
   },
   plugins: [mtConfig],
