@@ -1,14 +1,13 @@
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import './global.css';
 
-export default function RootLayout() {
+
+export default function AuthLayout() {
   return (
     <SafeAreaProvider>
-        <Stack
+     <Stack
         screenOptions={{
-          headerShown: false, // 👈 Oculta por defecto
-          animation: 'none',  // Desactiva animaciones para evitar glitches
+          headerShown: false,
         }}
       />
     </SafeAreaProvider>
