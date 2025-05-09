@@ -545,7 +545,7 @@ const ReportCrimen = () => {
                           <div className="rounded-lg overflow-hidden">
                             <MediaPreview media={formData.media} />
                           </div>
-                           <IconButton variant="outline"
+                          <IconButton variant="outline"
                             type="button"
                             color="error"
                             className="absolute top-2 right-2 rounded-full h-8 w-8"
@@ -612,7 +612,7 @@ const ReportCrimen = () => {
                     </Button>
                   ) : (
                     <Button
-                      type="submit" // 👈 solo se puede enviar en el último paso
+                      type="submit"
                       className="bg-gradient-to-r from-[#6c5ce7] to-[#8a7bf8] hover:from-[#5b4bc9] hover:to-[#7a6be8] text-white"
                       disabled={isSubmitting}
                     >
@@ -635,80 +635,82 @@ const ReportCrimen = () => {
           transition={{ duration: 0.5, delay: 0.5 }}
         >
           <div className="bg-[#1a1d29]/80 backdrop-blur-sm rounded-xl p-6 border border-[#2e3347]/50 shadow-xl sticky top-4">
-            <div className="mb-4 flex items-center">
-              <div className="w-8 h-8 rounded-full bg-[#6c5ce7]/20 flex items-center justify-center mr-2">
-                <Eye className="h-4 w-4 text-[#6c5ce7]" />
+            <div className="mb-6 flex items-center">
+              <div className="w-10 h-10 rounded-full bg-[#6c5ce7]/20 flex items-center justify-center mr-3">
+                <Eye className="h-5 w-5 text-[#6c5ce7]" />
               </div>
               <h2 className="text-xl font-semibold">Vista Previa</h2>
             </div>
             <div className="bg-[#13151f]/80 rounded-lg overflow-hidden border border-[#2e3347]/50">
 
-              {/* Media preview   media={formData.media} */}
-              <div className="relative">
+              {/* Media preview */}
+              <div className="relative mb-6">
                 <MediaPreview media={formData.media} />
                 {formData.media && (
-                  <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
+                  <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-3 py-1 rounded-full">
                     {formData.media.type === "image" ? "Imagen" : "Video"}
                   </div>
                 )}
               </div>
 
               {/* Contenido de la vista previa */}
-              <div className="p-4 space-y-4">
+              <div className="p-6 space-y-6">
                 {/* Tipo de incidente */}
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
-                    <ReportIcon className="h-5 w-5 text-red-500" />
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
+                    <ReportIcon className="h-6 w-6 text-red-500" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold">{formData.tipoIncidente || "Tipo de Incidente"}</h3>
                     <div className="flex items-center text-xs text-gray-400">
-                      <Clock className="h-3 w-3 mr-1" />
+                      <Clock className="h-3 w-3 mr-2" />
                       <span>{time}</span>
-                      <span className="mx-1">•</span>
-                      <Calendar className="h-3 w-3 mr-1" />
+                      <span className="mx-2">•</span>
+                      <Calendar className="h-3 w-3 mr-2" />
                       <span>{date}</span>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Ubicación */}
-              <div className="flex items-start gap-2 bg-[#1a1d29]/50 p-3 rounded-lg">
-                <MapIcon className="h-4 w-4 text-[#6c5ce7] mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">{formData.ubicacion || "Ubicación aproximada"}</p>
-                  {formData.latitude && formData.longitude && (
-                    <p className="text-xs text-gray-400">
-                      Lat: {formData.latitude.toFixed(6)}, Lng: {formData.longitude.toFixed(6)}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Descripción */}
-              <div className="space-y-2">
-                <h4 className="text-sm font-medium text-gray-400">Descripción</h4>
-                <p className="text-sm text-gray-300 bg-[#1a1d29]/30 p-3 rounded-lg border-l-2 border-[#6c5ce7]">
-                  {formData.descripcion || "Descripción breve del incidente..."}
-                </p>
-              </div>
-
-              {/* Estado */}
-              <div className="flex items-center justify-between pt-2 border-t border-[#2e3347]/50">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-[#6c5ce7]/20 flex items-center justify-center">
-                    <User className="h-3 w-3 text-[#6c5ce7]" />
+                {/* Ubicación */}
+                <div className="flex items-start gap-3 bg-[#1a1d29]/50 p-4 rounded-lg">
+                  <MapIcon className="h-5 w-5 text-[#6c5ce7] mt-0.5" />
+                  <div>
+                    <p className="text-sm font-medium">{formData.ubicacion || "Ubicación aproximada"}</p>
+                    {formData.latitude && formData.longitude && (
+                      <p className="text-xs text-gray-400">
+                        Lat: {formData.latitude.toFixed(6)}, Lng: {formData.longitude.toFixed(6)}
+                      </p>
+                    )}
                   </div>
-                  <span className="text-xs text-gray-400">Usuario Anónimo</span>
                 </div>
-                <div className="bg-yellow-500/20 text-yellow-500 text-xs px-2 py-1 rounded-full">Pendiente</div>
-              </div>
 
+                {/* Descripción */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-gray-400">Descripción</h4>
+                  <p className="text-sm text-gray-300 bg-[#1a1d29]/30 p-4 rounded-lg border-l-4 border-[#6c5ce7]">
+                    {formData.descripcion || "Descripción breve del incidente..."}
+                  </p>
+                </div>
+
+                {/* Estado */}
+                <div className="flex items-center justify-between pt-3 border-t border-[#2e3347]/50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#6c5ce7]/20 flex items-center justify-center">
+                      <User className="h-4 w-4 text-[#6c5ce7]" />
+                    </div>
+                    <span className="text-xs text-gray-400">Usuario Anónimo</span>
+                  </div>
+                  <div className="bg-yellow-500/20 text-yellow-500 text-xs px-3 py-1 rounded-full">Pendiente</div>
+                </div>
+
+              </div>
             </div>
           </div>
         </motion.div>
+
       </div>
+      
     </div>
   );
 }
