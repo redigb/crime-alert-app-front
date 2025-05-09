@@ -21,6 +21,5 @@ export const useAuthStore = create(persist<State & Actions>((set) => ({
         profile: null,
     }))
 }),{
-    // para guardar el token en el localStorage
     name: "auth-storage",
 }));

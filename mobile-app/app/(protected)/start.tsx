@@ -2,7 +2,7 @@ import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Link } from 'expo-router';
 
 export default function HomeScreen() {
-  // Datos de ejemplo (puedes reemplazar con tu API)
+
   const features = [
     {
       id: 1,

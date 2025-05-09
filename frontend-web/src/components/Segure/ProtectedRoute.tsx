@@ -3,8 +3,8 @@ import { Navigate, Outlet } from "react-router-dom";
 import { Props } from "./interface"
 
 export const ProtectedRoute = ({isAllowed, children}: Props) => {
-    /*if (!isAllowed) {
+    if (!isAllowed) {
         return <Navigate to="/" />;
-    }  */
+    } 
     return children ? <>{children}</> : <Outlet />;
 } 

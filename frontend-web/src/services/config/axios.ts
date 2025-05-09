@@ -14,6 +14,7 @@ const authApi = axios.create({
     withCredentials: true,
 });
 
+// añadir token automaticamente
 authApi.interceptors.request.use(config => {
     const token = useAuthStore.getState().token;
     if (token && config.headers) {
