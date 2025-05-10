@@ -1,225 +1,175 @@
-import { useState, useRef, useEffect } from "react"
+import { useState } from "react"
+// components
+import ReporteCard from "./ReportedCard"
+import { Chip, Button, Tabs, Menu } from "@material-tailwind/react";
+import { AlertCircle, Filter, ReportIcon, SimpleIcon } from "../../assets/icons/Icons";
 
+import { motion } from "framer-motion";
+// Data - preview
+import { REPORTES_EJEMPLO } from "./dataReport"
 
-
-type MediaFile = {
-    file: File
-    type: "image" | "video"
-    url: string
-}
-
-type FormData = {
-    titulo: string
-    descripcion: string
-    ubicacion: string
-    latitude: number | null
-    longitude: number | null
-    tipoIncidente: string
-    media: MediaFile | null
-}
-
-const TIPOS_INCIDENTE = ["Accidente de tráfico", "Incendio", "Inundación", "Robo", "Vandalismo", "Otro"]
 
 
 const ReportsPublished = () => {
 
-    const [formData, setFormData] = useState<FormData>({
-        titulo: "",
-        descripcion: "",
-        ubicacion: "",
-        latitude: null,
-        longitude: null,
-        tipoIncidente: "",
-        media: null,
-    });
+    const [expandedReporte, setExpandedReporte] = useState<number | null>(null)
 
-    const [errors, setErrors] = useState<Record<string, string>>({})
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [currentStep, setCurrentStep] = useState(1)
-    const [date, setDate] = useState("")
-    const [time, setTime] = useState("")
-    const fileInputRef = useRef<HTMLInputElement>(null)
-
-    useEffect(() => {
-        // Set current date and time
-        const now = new Date()
-        setDate(now.toLocaleDateString())
-        setTime(now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }))
-    }, []);
-
-    const validateForm = () => {
-        const newErrors: Record<string, string> = {}
-
-        if (!formData.titulo) {
-            newErrors.titulo = "El título es obligatorio"
-        } else if (formData.titulo.length > 255) {
-            newErrors.titulo = "El título no puede exceder los 255 caracteres"
-        }
-
-        if (!formData.descripcion) {
-            newErrors.descripcion = "La descripción es obligatoria"
-        }
-
-        if (!formData.latitude || !formData.longitude) {
-            newErrors.ubicacion = "La ubicación es obligatoria"
-        }
-
-        if (!formData.tipoIncidente) {
-            newErrors.tipoIncidente = "Selecciona un tipo de incidente"
-        }
-
-        setErrors(newErrors)
-        return Object.keys(newErrors).length === 0
+    const toggleExpand = (id: number) => {
+        setExpandedReporte(expandedReporte === id ? null : id)
     }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-
-        if (!validateForm()) return
-
-        setIsSubmitting(true)
-
-        try {
-            // Aquí iría la lógica para enviar los datos al servidor
-            // Simulamos un envío exitoso
-            await new Promise((resolve) => setTimeout(resolve, 1500))
-            alert("Reporte publicado con éxito")
-
-            // Resetear el formulario
-            setFormData({
-                titulo: "",
-                descripcion: "",
-                ubicacion: "",
-                latitude: null,
-                longitude: null,
-                tipoIncidente: "",
-                media: null,
-            })
-            setCurrentStep(1)
-        } catch (error) {
-            console.error("Error al publicar el reporte:", error)
-            alert("Error al publicar el reporte. Inténtalo de nuevo.")
-        } finally {
-            setIsSubmitting(false)
+    const getEstadoBadge = (estado: string) => {
+        switch (estado) {
+            case "verificado":
+                return <Chip className="bg-blue-500 hover:bg-blue-600"><Chip.Label>Verificado</Chip.Label></Chip>
+            case "urgente":
+                return <Chip className="bg-red-500 hover:bg-red-600"><Chip.Label>Urgente</Chip.Label></Chip>
+            case "resuelto":
+                return <Chip className="bg-green-500 hover:bg-green-600"><Chip.Label>Resuelto</Chip.Label></Chip>
+            default:
+                return <Chip className="bg-yellow-500 hover:bg-yellow-600"><Chip.Label>Pendiente</Chip.Label></Chip>
         }
     }
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0]
-        if (!file) return
-
-        // Validar tamaño y tipo de archivo
-        const isImage = file.type.startsWith("image/")
-        const isVideo = file.type.startsWith("video/")
-
-        if (isImage) {
-            // Máximo 5MB para imágenes
-            if (file.size > 5 * 1024 * 1024) {
-                setErrors({ ...errors, media: "La imagen no debe exceder los 5MB" })
-                return
-            }
-        } else if (isVideo) {
-            // Máximo 20MB para videos
-            if (file.size > 20 * 1024 * 1024) {
-                setErrors({ ...errors, media: "El video no debe exceder los 20MB" })
-                return
-            }
-        } else {
-            setErrors({ ...errors, media: "Formato de archivo no soportado" })
-            return
-        }
-
-        // Crear URL para previsualización
-        const url = URL.createObjectURL(file)
-        setFormData({
-            ...formData,
-            media: {
-                file,
-                type: isImage ? "image" : "video",
-                url,
-            },
-        })
-
-        // Limpiar error si existía
-        if (errors.media) {
-            const { media, ...restErrors } = errors
-            setErrors(restErrors)
+    const getCategoriaIcon = (categoria: string) => {
+        switch (categoria.toLowerCase()) {
+            case "robo":
+                return <AlertCircle className="h-5 w-5 text-red-500" />
+            case "incendio":
+                return <AlertCircle className="h-5 w-5 text-orange-500" />
+            case "accidente":
+                return <AlertCircle className="h-5 w-5 text-yellow-500" />
+            default:
+                return <AlertCircle className="h-5 w-5 text-blue-500" />
         }
     }
-
-    const handleGetLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords
-                    setFormData({
-                        ...formData,
-                        latitude,
-                        longitude,
-                        ubicacion: `Lat: ${latitude.toFixed(6)}, Lng: ${longitude.toFixed(6)}`,
-                    })
-
-                    // Limpiar error si existía
-                    if (errors.ubicacion) {
-                        const { ubicacion, ...restErrors } = errors
-                        setErrors(restErrors)
-                    }
-                },
-                (error) => {
-                    console.error("Error obteniendo ubicación:", error)
-                    setErrors({
-                        ...errors,
-                        ubicacion: "No se pudo obtener la ubicación. Por favor, ingrésala manualmente.",
-                    })
-                },
-            )
-        } else {
-            setErrors({
-                ...errors,
-                ubicacion: "Tu navegador no soporta geolocalización.",
-            })
-        }
-    }
-
-    const handleRemoveMedia = () => {
-        if (formData.media) {
-            URL.revokeObjectURL(formData.media.url)
-            setFormData({
-                ...formData,
-                media: null,
-            })
-        }
-    }
-
-    const nextStep = () => {
-        if (currentStep === 1) {
-            if (!formData.tipoIncidente) {
-                setErrors({ ...errors, tipoIncidente: "Selecciona un tipo de incidente" })
-                return
-            }
-            if (!formData.descripcion) {
-                setErrors({ ...errors, descripcion: "La descripción es obligatoria" })
-                return
-            }
-        } else if (currentStep === 2) {
-            if (!formData.latitude || !formData.longitude) {
-                setErrors({ ...errors, ubicacion: "La ubicación es obligatoria" })
-                return
-            }
-        }
-
-        setCurrentStep(currentStep + 1)
-    }
-
-    const prevStep = () => {
-        setCurrentStep(currentStep - 1)
-    }
-
 
 
     return (
-        <div>
+        <div className="space-y-6">
+            {/* Encabezado con título y botones de acción */}
+            <motion.div
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div>
+                    <div className="flex items-center gap-x-3">
+                        <SimpleIcon className="h-10 w-10 text-red-500" />
+                        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-[#6c5ce7]">
+                            Reportes de Incidentes
+                        </h1>
+                    </div>
+                    <p className="text-gray-400 mt-1">
+                        Mantente informado sobre lo que ocurre en tu alrededor
+                    </p>
+                </div>
+                <div className="flex gap-2">
+                    <Menu>
+                        <Menu.Trigger>
+                            <Button
+                                variant="outline"
+                                className="bg-[#1a1d29]/80 border border-[#2e3347] text-white hover:bg-[#2e3347]/50 flex items-center gap-2"
+                            >
+                                <Filter className="h-4 w-4" />
+                                Filtrar
+                            </Button>
+                        </Menu.Trigger>
 
+                        <Menu.Content className="bg-[#1a1d29] text-white border border-[#2e3347] shadow-lg rounded-lg mt-2">
+                            <Menu.Item className="hover:bg-[#2e3347] px-4 py-2 cursor-pointer">Add Team</Menu.Item>
+                            <Menu.Item className="hover:bg-[#2e3347] px-4 py-2 cursor-pointer">Add Project</Menu.Item>
+                            <Menu.Item className="hover:bg-[#2e3347] px-4 py-2 cursor-pointer">My Profile</Menu.Item>
+                        </Menu.Content>
+                    </Menu>
+                </div>
+            </motion.div>
+            <Tabs defaultValue="todos" className="w-full">
+                <Tabs.List className="flex gap-2 bg-[#1a1d29]/80 border border-[#2e3347]/50 p-1 rounded-lg">
+                    {[
+                        { label: "Todos", value: "todos" },
+                        { label: "Robos", value: "robos" },
+                        { label: "Accidentes", value: "accidentes" },
+                        { label: "Incendio", value: "incendio" },
+                        { label: "Otros", value: "otros" },
+                    ].map((tab) => (
+                        <Tabs.Trigger
+                            key={tab.value}
+                            value={tab.value}
+                            className="px-4 py-2 text-sm rounded-md transition-colors duration-200 
+                                        aria-selected:bg-[#6c5ce7] font-medium
+                                        aria-selected:text-white 
+                                        text-[#A0A0B0] 
+                                        hover:bg-[#2a2e42]"
+                        >
+                            {tab.label}
+                        </Tabs.Trigger>
+                    ))}
+                </Tabs.List>
+                <Tabs.Panel value="todos" className="mt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {REPORTES_EJEMPLO.map((reporte, index) => (
+                            <ReporteCard
+                                key={reporte.id}
+                                reporte={reporte}
+                                index={index}
+                                expandedReporte={expandedReporte}
+                                toggleExpand={toggleExpand}
+                                getEstadoBadge={getEstadoBadge}
+                                getCategoriaIcon={getCategoriaIcon}
+                            />
+                        ))}
+                    </div>
+                </Tabs.Panel>
+                <Tabs.Panel value="robos">
+                    <div className="space-y-6">
+                        {REPORTES_EJEMPLO.filter((r) => r.categoria.toLowerCase() === "robo").map((reporte, index) => (
+                            <ReporteCard
+                                key={reporte.id}
+                                reporte={reporte}
+                                index={index}
+                                expandedReporte={expandedReporte}
+                                toggleExpand={toggleExpand}
+                                getEstadoBadge={getEstadoBadge}
+                                getCategoriaIcon={getCategoriaIcon}
+                            />
+                        ))}
+                    </div>
+                </Tabs.Panel>
+                <Tabs.Panel value="accidentes">
+                    {REPORTES_EJEMPLO.filter((r) => r.categoria.toLowerCase() === "accidente").map((reporte, index) => (
+                        <ReporteCard
+                            key={reporte.id}
+                            reporte={reporte}
+                            index={index}
+                            expandedReporte={expandedReporte}
+                            toggleExpand={toggleExpand}
+                            getEstadoBadge={getEstadoBadge}
+                            getCategoriaIcon={getCategoriaIcon}
+                        />
+                    ))}
+                </Tabs.Panel>
+                <Tabs.Panel value="incendio">
+                    {REPORTES_EJEMPLO.filter((r) => r.categoria.toLowerCase() === "incendio").map((reporte, index) => (
+                        <ReporteCard
+                            key={reporte.id}
+                            reporte={reporte}
+                            index={index}
+                            expandedReporte={expandedReporte}
+                            toggleExpand={toggleExpand}
+                            getEstadoBadge={getEstadoBadge}
+                            getCategoriaIcon={getCategoriaIcon}
+                        />
+                    ))}
+                </Tabs.Panel>
+                <Tabs.Panel value="otros">
+                    <div className="p-8 text-center text-gray-400">
+                        <ReportIcon className="h-12 w-12 mx-auto mb-4 text-gray-500 opacity-50" />
+                        <p>No hay reportes en esta categoría</p>
+                    </div>
+                </Tabs.Panel>
+            </Tabs>
         </div>
     );
 }

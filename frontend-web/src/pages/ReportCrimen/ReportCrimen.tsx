@@ -2,22 +2,23 @@
 import { useState, useEffect, useRef } from "react";
 // Components
 import {
-  Button, Typography, Input, Textarea,
+  Button, Input, Textarea,
   Select, IconButton
 } from "@material-tailwind/react";
 import { motion } from "framer-motion"
-// Types || Interface
+// Types || Interface || utils
 import { FormDataReport } from "./TypesReportCrimen";
+import { useCn as cn } from "../../utils";
 //Icon
 import {
   ReportIcon, MapIcon, Upload,
   AlertTriangle, Calendar, Clock,
   Eye, ChevronRight, User, X
 } from "../../assets/icons/Icons";
-import { MediaPreview } from "../../components/MediaPreview";
+import { MediaPreview } from "../../components/media";
 
-const MAX_IMAGE_SIZE_MB = 5;
-const MAX_VIDEO_SIZE_MB = 20;
+/*const MAX_IMAGE_SIZE_MB = 5;
+const MAX_VIDEO_SIZE_MB = 20;*/
 const TIPOS_INCIDENTE = ["Accidente de tráfico", "Incendio", "Inundación", "Robo", "Vandalismo", "Otro"];
 const ReportCrimen = () => {
 
@@ -30,9 +31,6 @@ const ReportCrimen = () => {
     tipoIncidente: "",
     media: null,
   });
-
-  const cn = (...classes: (string | false | undefined)[]) =>
-    classes.filter(Boolean).join(" ");
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -192,8 +190,6 @@ const ReportCrimen = () => {
       })
     }
   }
-
-  console.log("FormData:", formData);
 
   const nextStep = () => {
     if (currentStep === 1) {
@@ -710,7 +706,7 @@ const ReportCrimen = () => {
         </motion.div>
 
       </div>
-      
+
     </div>
   );
 }

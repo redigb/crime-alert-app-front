@@ -5,8 +5,8 @@ import { useAuthStore } from "../../store/auth";
 const isDev = import.meta.env.MODE === "development";
 
 const baseURL = isDev
-  ? import.meta.env.VITE_TESTING_URL
-  : import.meta.env.VITE_PRODUCTION_URL;
+    ? import.meta.env.VITE_TESTING_URL
+    : import.meta.env.VITE_PRODUCTION_URL;
 
 // Aotomatic conect - backend with axios
 const authApi = axios.create({
@@ -22,5 +22,29 @@ authApi.interceptors.request.use(config => {
     }
     return config;
 });
+
+// Manejo automático de errores de autenticación o red
+authApi.interceptors.response.use(
+    response => response,
+    error => {
+        //const status = error?.response?.status;
+
+        // Si el token expiró o no hay permisos
+        /*if (status === 401 || status === 403) {
+            console.warn("Token expirado o acceso denegado. Cerrando sesión...");
+            useAuthStore.getState().logout();
+            window.location.href = "/login";
+        }*/
+
+        // Si el servidor está caído o sin conexión
+        if (error.code === "ECONNABORTED" || error.message === "Network Error") {
+            console.warn("No hay conexión con el servidor. Cerrando sesión...");
+            useAuthStore.getState().logout();
+            window.location.href = "/login";
+        }
+
+        return Promise.reject(error);
+    }
+);
 
 export default authApi;

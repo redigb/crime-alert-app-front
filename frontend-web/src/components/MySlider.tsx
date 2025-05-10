@@ -10,7 +10,7 @@ interface CustomSliderProps {
   className?: string;
 }
 
-const CustomSlider: React.FC<CustomSliderProps> = ({
+const MySlider: React.FC<CustomSliderProps> = ({
   value,
   onChange,
   min = 0,
@@ -38,4 +38,4 @@ const CustomSlider: React.FC<CustomSliderProps> = ({
   );
 };
 
-export default CustomSlider;
+export default MySlider;

@@ -1,17 +1,18 @@
-import { ReportsPublished } from "../../components/Reports"; 
+import { ReportsPublished } from "../../components/Reports";
 import { WidgetsStart } from "../../components/Widgets";
 
 const Inicio = () => {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#0f1117] via-[#131726] to-[#1a1e33] text-white p-4 py-6">
+    <main className="min-h-screen text-white p-4 py-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-3">
-             <div className="lg:col-span-3">
-                <ReportsPublished />
-             </div>
 
-            <div className="lg:col-span-1">
+          <div className="lg:col-span-3">
+            <ReportsPublished />
+          </div>
+
+          <div className="lg:col-span-1">
+            <div className="lg:sticky lg:top-6 h-[calc(100vh-3rem)] overflow-y-auto no-scrollbar">
               <WidgetsStart />
             </div>
           </div>
