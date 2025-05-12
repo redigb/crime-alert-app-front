@@ -6,10 +6,10 @@ export { HomePublic }
 
 // App-paginas-privates
 export const Inicio = lazy(() => import('./Start/Inicio'));
-export const Profile = lazy(() => import('./Profile'));
+export const Profile = lazy(() => import('./Profile/ProfileUser.tsx'));
 export const ReportCrimen = lazy(() => import('./ReportCrimen/ReportCrimen.tsx'));
-export const Map = lazy(() => import('./Map/ViewSuccesMap'));
-export const Saves = lazy(() => import('./Saves'));
+export const Map = lazy(() => import('./Map/ViewMap.tsx'));
+export const Saves = lazy(() => import('./Saves/Saves.tsx'));
 
 
 // Pagina-No encontrada.

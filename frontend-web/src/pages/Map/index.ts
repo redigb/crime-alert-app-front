@@ -1,1 +1,1 @@
-export { default as ViewSuccesMap} from "./ViewSuccesMap";
+export { default as ViewSuccesMap} from "./ViewMap";

@@ -4,7 +4,7 @@ import { WidgetsStart } from "../../components/Widgets";
 const Inicio = () => {
   return (
     <main className="min-h-screen text-white p-4 py-6">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-full mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
           <div className="lg:col-span-3">

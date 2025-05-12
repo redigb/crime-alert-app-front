@@ -8,7 +8,7 @@ const useLogout = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await logoutRequest(); // espera a que el backend cierre sesión
+      const res = await logoutRequest(); 
 
       if (res.data.status === true) {
         logout(); // limpia tu estado local (ej. usuario/contexto/token)

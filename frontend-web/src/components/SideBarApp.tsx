@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
-    HomeIcon, MapIcon, ChevronRight,
+    MapIcon, ChevronRight,
     Chevronleft, LogoutIcon, User,
-    ReportIcon, SaveIcon
+    ReportIcon, SaveIcon, AlertPlus
 } from "../assets/icons/Icons";
 // Components
 import { Avatar } from "@material-tailwind/react";
@@ -13,9 +13,9 @@ import { useAuthStore } from "../store/auth";
 import { useLogout } from "../hooks";
 
 const menuItems = [
-    { name: "Inicio", icon: <HomeIcon width={22} height={22} />, path: "/inicio" },
+    { name: "Reportes", icon: <ReportIcon width={22} height={22} />, path: "/inicio" },
     { name: "Mapa", icon: <MapIcon width={22} height={22} />, path: "/mapa" },
-    { name: "Alertas", icon: <ReportIcon width={22} height={22} />, path: "/reportar" },
+    { name: "Añadir Reporte", icon: <AlertPlus width={22} height={22} />, path: "/reportar" },
     { name: "Guardados", icon: <SaveIcon width={22} height={22} />, path: "/guardados" },
 ];
 

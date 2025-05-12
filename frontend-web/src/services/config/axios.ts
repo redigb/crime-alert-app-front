@@ -27,14 +27,14 @@ authApi.interceptors.request.use(config => {
 authApi.interceptors.response.use(
     response => response,
     error => {
-        //const status = error?.response?.status;
+        const status = error?.response?.status;
 
-        // Si el token expiró o no hay permisos
-        /*if (status === 401 || status === 403) {
+        
+        if (status === 401 ) {
             console.warn("Token expirado o acceso denegado. Cerrando sesión...");
             useAuthStore.getState().logout();
             window.location.href = "/login";
-        }*/
+        }
 
         // Si el servidor está caído o sin conexión
         if (error.code === "ECONNABORTED" || error.message === "Network Error") {

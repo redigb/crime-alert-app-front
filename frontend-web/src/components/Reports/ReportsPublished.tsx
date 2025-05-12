@@ -7,12 +7,13 @@ import { AlertCircle, Filter, ReportIcon, SimpleIcon } from "../../assets/icons/
 import { motion } from "framer-motion";
 // Data - preview
 import { REPORTES_EJEMPLO } from "./dataReport"
+import HeaderTitle from "../HeaderTitle";
 
 
 
 const ReportsPublished = () => {
 
-    const [expandedReporte, setExpandedReporte] = useState<number | null>(null)
+    const [expandedReporte, setExpandedReporte] = useState<number | null>(null);
 
     const toggleExpand = (id: number) => {
         setExpandedReporte(expandedReporte === id ? null : id)
@@ -54,17 +55,12 @@ const ReportsPublished = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
             >
-                <div>
-                    <div className="flex items-center gap-x-3">
-                        <SimpleIcon className="h-10 w-10 text-red-500" />
-                        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-[#6c5ce7]">
-                            Reportes de Incidentes
-                        </h1>
-                    </div>
-                    <p className="text-gray-400 mt-1">
-                        Mantente informado sobre lo que ocurre en tu alrededor
-                    </p>
-                </div>
+                <HeaderTitle
+                    icon={<SimpleIcon className="h-7 w-7" />}
+                    title1="Reportes de"
+                    title2="Incidentes"
+                    subtitle="Mantente informado sobre lo que ocurre en tu alrededor."
+                />
                 <div className="flex gap-2">
                     <Menu>
                         <Menu.Trigger>

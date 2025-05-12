@@ -131,7 +131,11 @@ const WidgetsStart = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
             >
-                <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white h-14 rounded-xl shadow-lg shadow-red-500/20">
+                <Button className="w-full bg-gradient-to-r 
+                from-red-500 border-transparent
+                 to-red-600 hover:from-red-600
+                  hover:to-red-700 text-white h-14 
+                  rounded-xl shadow-lg shadow-red-500/20">
                     <ReportIcon className="h-5 w-5 mr-2" />
                     Reportar Incidente
                 </Button>
