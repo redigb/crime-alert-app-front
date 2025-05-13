@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { Button } from "@material-tailwind/react";
 
+import logo from "../../../public/icon.png";
 import {
   ReportIcon as Bell, Users, Menu, ChevronRight,
   Star, Shield,
@@ -19,10 +20,13 @@ const HomePublic = () => {
       {/* Navbar */}
       <header className="container mx-auto py-6 px-4 flex justify-between items-center border-b border-[#8a70ff]/20">
         <MagneticEffect>
-          <Link to="/" className="text-2xl font-bold relative group">
+          <Link to="/" className="flex items-center gap-3 text-2xl font-bold relative group">
+            <img src={logo} alt="Logo AlertaSegura" className="h-12 w-12 object-contain" />
+
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#a28bff] to-[#8a70ff] group-hover:from-[#b9a4ff] group-hover:to-[#9f89ff] transition-all duration-300">
               AlertaSegura
             </span>
+
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#a28bff] to-[#8a70ff] group-hover:w-full transition-all duration-300"></span>
           </Link>
         </MagneticEffect>

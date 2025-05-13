@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import logo from "../.././public/icon.png";
+import { MagneticEffect } from "../pages/Home-public/components/MagneticEffect";
 import {
     MapIcon, ChevronRight,
     Chevronleft, LogoutIcon, User,
@@ -40,10 +42,18 @@ const SideBarApp = () => {
             <div>
                 <div className="flex items-center justify-between p-6">
                     {!collapsed && (
-                        <h1 className="text-2xl font-bold text-white tracking-wide">
-                            Alerta<span className="text-primary">Segura</span>
-                            {/* Logo */}
-                        </h1>
+                        <MagneticEffect>
+                            <div className="flex items-center gap-3 relative group text-2xl font-bold tracking-wide text-white">
+                                <img src={logo} alt="Logo AlertaSegura" className="h-10 w-10 object-contain" />
+
+                                <span>
+                                    Alerta
+                                    <span className="text-primary">Segura</span>
+                                </span>
+
+                                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#a28bff] to-[#8a70ff] group-hover:w-full transition-all duration-300" />
+                            </div>
+                        </MagneticEffect>
                     )}
                     <button
                         onClick={() => setCollapsed(!collapsed)}
