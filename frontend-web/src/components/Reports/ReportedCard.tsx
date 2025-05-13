@@ -4,7 +4,7 @@ import { MediaViewer } from "../media"
 // Icons
 import {
     Calendar, User, MapIcon as MapPin,
-    Clock, Eye, Tag, ChevronDown, Separator,
+    Clock, Eye, Tag, ChevronDown,
     MessageCircle, Flag, Like, Share,
     SaveIcon
 } from "../../assets/icons/Icons"

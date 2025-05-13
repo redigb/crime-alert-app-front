@@ -15,23 +15,15 @@ import SpinnerSuspense from '../../components/Statics/Spinner';
 import { useCn as cn } from '../../utils';
 import { useIsMobile } from '../../hooks/useIsMobile';
 // Data
-import { REPORTES_EJEMPLO } from '../../components/Reports/dataReport';
 import { HeaderTitle } from '../../components';
 import { listReports } from '../../services/reports.service';
 
-interface MapaAvanzadoProps {
-  alertas: any[]
-  onSelectAlerta: (id: number) => void
-}
-
 const ViewMap = () => {
 
-  const [alertas, setAlertas] = useState<any[]>(REPORTES_EJEMPLO);
   //setAlertas(REPORTES_EJEMPLO);
   const [filtroActivo, setFiltroActivo] = useState("todos")
-  const [alertaHover, setAlertaHover] = useState<number | null>(null)
-  const [reportesRecientes, setReportesRecientes] = useState<any[]>([])
-  const [estadisticas, setEstadisticas] = useState({ robos: 8, acoso: 3 })
+  //const [alertaHover, setAlertaHover] = useState<number | null>(null)
+  //const [estadisticas, setEstadisticas] = useState({ robos: 8, acoso: 3 })
   const [showFilters, setShowFilters] = useState(false);
 
   const [showSidebar, setShowSidebar] = useState(false)
@@ -42,12 +34,7 @@ const ViewMap = () => {
   }
 
   // Generar posiciones fijas para los marcadores
-  useEffect(() => {
-    // Filtrar y ordenar alertas para el panel de reportes recientes
-    const recientes = [...alertas].sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()).slice(0, 4)
 
-    setReportesRecientes(recientes)
-  }, [alertas])
 
   const [reportes, setReportes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -246,7 +233,7 @@ const ViewMap = () => {
               key={alerta.id}
               longitude={lon}
               latitude={lat}
-              onClick={() => setAlertaHover(alerta.id)}
+              
             >
               <div
                 className="relative z-10"
@@ -414,7 +401,7 @@ const ViewMap = () => {
               </div>
             </div>
 
-            {/* Estadísticas */}
+            {/* Estadísticas 
             <div className="p-4 border-t border-[#2e3347]/50">
               <div className="bg-[#1a1d29]/80 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-3">
@@ -432,7 +419,7 @@ const ViewMap = () => {
                   </li>
                 </ul>
               </div>
-            </div>
+            </div>*/}
           </div>
         )}
 
@@ -504,7 +491,7 @@ const ViewMap = () => {
                   </div>
                 </div>
 
-                {/* Estadísticas - Móvil */}
+                {/* Estadísticas - Móvil 
                 <div className="p-3 border-t border-[#2e3347]/50">
                   <div className="bg-[#1a1d29]/80 rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-2">
@@ -522,7 +509,7 @@ const ViewMap = () => {
                       </li>
                     </ul>
                   </div>
-                </div>
+                </div>*/}
 
                 {/* Ubicaciones recientes - Móvil */}
                 <div className="p-3 border-t border-[#2e3347]/50">

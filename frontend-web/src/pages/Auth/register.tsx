@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { registerUser } from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "../../components/Dialog/GlobalDialog";

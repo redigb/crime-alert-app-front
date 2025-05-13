@@ -6,7 +6,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { Input, Button } from "@material-tailwind/react";
 import { motion } from "motion/react";
 import {
-    Barchart, Search, TrendingUp,
+   Search, 
     ReportIcon, MapIcon, ChevronRight,
     User, AlertTriangle,
     Shield
@@ -45,12 +45,7 @@ const WidgetsStart = () => {
         };
         fetchUsers();
     }, []);
-
-    const usuarios_activos = [
-        { id: 1, username: "carlos_vega", online: true },
-        { id: 2, username: "maria_lopez", online: true },
-        { id: 3, username: "user_alerta123", online: false },
-    ]
+    console.log(loading);
 
 
     return (

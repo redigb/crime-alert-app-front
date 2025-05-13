@@ -152,21 +152,21 @@ const reportesGuardadosData: Reporte[] = [
 const Saves: React.FC = () => {
 
   const [categoriaActiva, setCategoriaActiva] = useState<string>("todos")
-  const [reporteSeleccionado, setReporteSeleccionado] = useState<Reporte | null>(null)
-  const [openDialog, setOpenDialog] = useState(false)
-  const [openAlertDialog, setOpenAlertDialog] = useState(false)
-  const [reporteAEliminar, setReporteAEliminar] = useState<number | null>(null)
-  const [reportes, setReportes] = useState<Reporte[]>(reportesGuardadosData);
+
+  //const [openDialog, setOpenDialog] = useState(false)
+  //const [openAlertDialog, setOpenAlertDialog] = useState(false)
+  //const [reporteAEliminar, setReporteAEliminar] = useState<number | null>(null)
+ // const [reportes, setReportes] = useState<Reporte[]>(reportesGuardadosData);
   const [expandedReporte, setExpandedReporte] = useState<number | null>(null);
 
   // Filtrar reportes por categoría
   const reportesFiltrados =
     categoriaActiva === "todos"
-      ? reportes
-      : reportes.filter((reporte) => reporte.categoria.toLowerCase() === categoriaActiva.toLowerCase())
+      ? reportesGuardadosData
+      : reportesGuardadosData.filter((reporte) => reporte.categoria.toLowerCase() === categoriaActiva.toLowerCase())
 
   // Abrir diálogo con detalles del reporte
-  const verDetalles = (reporte: Reporte) => {
+  /*const verDetalles = (reporte: Reporte) => {
     setReporteSeleccionado(reporte)
     setOpenDialog(true)
   }
@@ -189,7 +189,7 @@ const Saves: React.FC = () => {
         setOpenDialog(false)
       }
     }
-  }
+  }*/
   const toggleExpand = (id: number) => {
     setExpandedReporte(expandedReporte === id ? null : id)
   }

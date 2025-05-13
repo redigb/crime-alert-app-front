@@ -1,8 +1,8 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { Button, Card } from "@material-tailwind/react"
 
 // services
-import { uploadProfileImage, deleteProfileImage } from "../../services/users.service";
+// import { uploadProfileImage, deleteProfileImage } from "../../services/users.service";
 
 import { useAuthStore } from "../../store/auth"
 import { useLogout } from "../../hooks"
@@ -17,12 +17,12 @@ import {
 const ProfileUser = () => {
 
   const logout = useLogout();
-  const updateProfile = useAuthStore((state) => state.setProfile);
+  //const updateProfile = useAuthStore((state) => state.setProfile);
   const getProfile = useAuthStore((state) => state.profile);
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  //const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  //const [fileName, setFileName] = useState<string | null>(null);
+  //const [loading, setLoading] = useState(false);
 
   if (!getProfile) {
     return (
@@ -36,34 +36,34 @@ const ProfileUser = () => {
     ? `${import.meta.env.VITE_TESTING_STORAGE}${getProfile.image_profile}`
     : null;
 
-  const handleUpload = async () => {
+  /*const handleUpload = async () => {
     if (!selectedFile) return;
     try {
-      setLoading(true);
+     // setLoading(true);
       const res = await uploadProfileImage(selectedFile);
       const updatedProfile = { ...getProfile, image_profile: res.data.data.path };
       updateProfile(updatedProfile);
       setSelectedFile(null);
-      setFileName(null);
+     // setFileName(null);
     } catch (error) {
       console.error("Error al subir imagen", error);
     } finally {
-      setLoading(false);
+     // setLoading(false);
     }
-  };
+  };*/
 
-  const handleDelete = async () => {
+  /*const handleDelete = async () => {
     try {
-      setLoading(true);
+     // setLoading(true);
       await deleteProfileImage();
       const updatedProfile = { ...getProfile, image_profile: null };
       updateProfile(updatedProfile);
     } catch (error) {
       console.error("Error al eliminar imagen", error);
     } finally {
-      setLoading(false);
+      //setLoading(false);
     }
-  };
+  };*/
 
   return (
     <div className="min-h-screen text-white">
