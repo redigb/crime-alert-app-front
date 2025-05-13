@@ -12,25 +12,25 @@ const Login = () => {
   const token = useAuthStore((state) => state.token);
   const profile = useAuthStore((state) => state.profile);
   const logout = useAuthStore((state) => state.logout);
-useEffect(() => {
-  const fetchProfile = async () => {
-    if (token) {
-      try {
-        const resProfile = await profileRequest(profile.name);
-        if (resProfile.data.status === 200) {
-          setProfile(resProfile.data.data);
-          navigate("/inicio");
-          return;
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (token) {
+        try {
+          const resProfile = await profileRequest(profile.name);
+          if (resProfile.data.status === 200) {
+            setProfile(resProfile.data.data);
+            navigate("/inicio");
+            return;
+          }
+        } catch (error) {
+          console.error("Error al cargar perfil", error);
         }
-      } catch (error) {
-        console.error("Error al cargar perfil", error);
       }
-    }
-    logout();
-  };
+      logout();
+    };
 
-  fetchProfile();
-}, []);
+    fetchProfile();
+  }, []);
 
 
   const setToken = useAuthStore((state) => state.setToken);
@@ -133,8 +133,8 @@ useEffect(() => {
             type="submit"
             disabled={loading}
             className={`w-full py-3 ${loading
-                ? "bg-[#5a49c7] cursor-not-allowed"
-                : "bg-gradient-to-r from-[#715DF2] to-[#5a49c7] hover:brightness-110"
+              ? "bg-[#5a49c7] cursor-not-allowed"
+              : "bg-gradient-to-r from-[#715DF2] to-[#5a49c7] hover:brightness-110"
               } text-white font-bold rounded-full transition duration-300`}
           >
             {loading ? "Iniciando..." : "Iniciar Sesión"}
