@@ -2,11 +2,9 @@ import axios from "axios";
 import { useAuthStore } from "../../store/auth";
 
 // cambia segun el arranque "dev" // "prod"
-const isDev = import.meta.env.MODE === "development";
+//const isDev = import.meta.env.MODE === "development";
 
-const baseURL = isDev
-    ? import.meta.env.VITE_TESTING_URL
-    : import.meta.env.VITE_PRODUCTION_URL;
+const baseURL = "https://crimen-alert-be-production.up.railway.app/api/";
 
 // Aotomatic conect - backend with axios
 const authApi = axios.create({
