@@ -1,8 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { routesPublic, routesApp } from "./routesConfig";
 import { ProtectedRoute } from "../components/Segure/ProtectedRoute";
-import { Suspense } from 'react'
-
+import { Suspense } from 'react';
 
 // Value-Zustand
 import { useAuthStore } from "../store/auth";
@@ -22,6 +21,7 @@ export const AppRouter = () => {
         ))
       }
       <Route element={<ProtectedRoute isAllowed={isAuth} />}>
+
         <Route element={<AppLayout />}>
           {
             routesApp.map((route: any, index: number) => (

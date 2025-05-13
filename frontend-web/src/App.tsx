@@ -7,15 +7,18 @@ import SpinnerSuspense from './components/Statics/Spinner'
 // Tailwind
 import './index.css'
 import { AppRouter } from './routes/Router'
+import { NotificationProvider } from './components/Dialog/GlobalDialog'
 
 function App() {
   return (
     <div className="bg-[#0B0B13] text-white min-h-screen">
-      <BrowserRouter>
-        <Suspense fallback={<SpinnerSuspense />}>
-          <AppRouter />
-        </Suspense>
-      </BrowserRouter >
+      <NotificationProvider>
+        <BrowserRouter>
+          <Suspense fallback={<SpinnerSuspense />}>
+            <AppRouter />
+          </Suspense>
+        </BrowserRouter >
+      </NotificationProvider>
     </div >
   )
 }

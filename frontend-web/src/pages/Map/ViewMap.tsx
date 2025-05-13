@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { Map } from '@vis.gl/react-maplibre';
+import { Map, Marker } from '@vis.gl/react-maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { motion, AnimatePresence } from 'motion/react';
 // Components
@@ -10,12 +10,14 @@ import {
   Flame, Filter, Search, Calendar, Menu,
   MapIcon, ChevronRight, Barchart, X
 } from '../../assets/icons/Icons';
+import SpinnerSuspense from '../../components/Statics/Spinner';
 // utils and Hoks
 import { useCn as cn } from '../../utils';
 import { useIsMobile } from '../../hooks/useIsMobile';
 // Data
 import { REPORTES_EJEMPLO } from '../../components/Reports/dataReport';
 import { HeaderTitle } from '../../components';
+import { listReports } from '../../services/reports.service';
 
 interface MapaAvanzadoProps {
   alertas: any[]
@@ -47,63 +49,44 @@ const ViewMap = () => {
     setReportesRecientes(recientes)
   }, [alertas])
 
+  const [reportes, setReportes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+ const [hoveredId, setHoveredId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchReportes = async () => {
+      const data = await listReports();
+      setReportes(data);
+      setLoading(false);
+    };
+    fetchReportes();
+  }, []);
+
+  if (loading) return <SpinnerSuspense />;
+
   const getCategoriaIcon = (categoria: string) => {
-    switch (categoria.toLowerCase()) {
-      case "robo":
-        return <AlertTriangle className="h-5 w-5 text-white" />
-      case "incendio":
-        return <Flame className="h-5 w-5 text-white" />
-      case "accidente":
-        return <AlertCircle className="h-5 w-5 text-white" />
-      case "sospechoso":
-        return <User className="h-5 w-5 text-white" />
-      case "servicios":
-        return <ReportIcon className="h-5 w-5 text-white" />
-      default:
-        return <ReportIcon className="h-5 w-5 text-white" />
+    switch (categoria?.toLowerCase()) {
+      case 'robo': return <AlertTriangle className="h-5 w-5 text-white" />;
+      case 'incendio': return <Flame className="h-5 w-5 text-white" />;
+      case 'accidente': return <AlertCircle className="h-5 w-5 text-white" />;
+      case 'sospechoso': return <User className="h-5 w-5 text-white" />;
+      case 'servicios': return <ReportIcon className="h-5 w-5 text-white" />;
+      default: return <ReportIcon className="h-5 w-5 text-white" />;
     }
-  }
+  };
 
   const getCategoriaColor = (categoria: string) => {
-    switch (categoria.toLowerCase()) {
-      case "robo":
-        return "bg-red-500"
-      case "incendio":
-        return "bg-orange-500"
-      case "accidente":
-        return "bg-yellow-500"
-      case "sospechoso":
-        return "bg-purple-500"
-      case "servicios":
-        return "bg-blue-500"
-      default:
-        return "bg-green-500"
+    switch (categoria?.toLowerCase()) {
+      case 'robo': return 'bg-red-500';
+      case 'incendio': return 'bg-orange-500';
+      case 'accidente': return 'bg-yellow-500';
+      case 'sospechoso': return 'bg-purple-500';
+      case 'servicios': return 'bg-blue-500';
+      default: return 'bg-green-500';
     }
-  }
+  };
 
-  // Generar posiciones fijas para los marcadores
-  const getMarkerPosition = (id: number) => {
-    // Usar el id para generar posiciones semi-aleatorias pero consistentes
-    const seed = (id * 13) % 100
-    const offsetX = ((seed % 7) - 3) * 5
-    const offsetY = ((seed % 11) - 5) * 5
-
-    // Posiciones base para diferentes áreas del mapa
-    const basePositions = [
-      { top: 30, left: 40 },
-      { top: 50, left: 60 },
-      { top: 70, left: 30 },
-      { top: 40, left: 70 },
-      { top: 60, left: 50 },
-    ]
-
-    const basePos = basePositions[id % basePositions.length]
-
-    return {
-      top: `${basePos.top + offsetY}%`,
-      left: `${basePos.left + offsetX}%`,
-    }
-  }
+  console.log("data: ", reportes);
 
   return (
     <div className="h-full flex flex-col">
@@ -239,105 +222,79 @@ const ViewMap = () => {
 
         {/* Mapa */}
         <div className="flex-1 relative">
-          <div className="w-full h-full bg-[#1f1f22] relative">
-            {/* Mapa real aquí (puede ser react-leaflet, etc.) */}
-            <Map
-              initialViewState={{
-                longitude: -76.2422,
-                latitude: -9.9306,
-                zoom: 14
-              }}
-              style={{ width: '100%', height: '100%' }}
-              mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-            />;
-          </div>
 
-          {/* Marcadores de incidentes */}
-          {alertas.map((alerta) => {
-            const position = getMarkerPosition(alerta.id)
-            const colorClass = getCategoriaColor(alerta.categoria)
+        <div className="w-full h-full bg-[#1f1f22] relative">
+      <Map
+        initialViewState={{
+          longitude: -76.2422,
+          latitude: -9.9306,
+          zoom: 14,
+        }}
+        style={{ width: '100%', height: '100%' }}
+        mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+      >
+        {reportes.map((alerta) => {
+          const lon = parseFloat(alerta.longitude);
+          const lat = parseFloat(alerta.latitude);
 
-            return (
+          if (isNaN(lon) || isNaN(lat)) return null;
+
+          const isHovered = hoveredId === alerta.id;
+
+          return (
+            <Marker
+              key={alerta.id}
+              longitude={lon}
+              latitude={lat}
+              onClick={() => setAlertaHover(alerta.id)}
+            >
               <div
-                key={alerta.id}
-                className="absolute"
-                style={{ top: position.top, left: position.left }}
-                onMouseEnter={() => setAlertaHover(alerta.id)}
-                onMouseLeave={() => setAlertaHover(null)}
-                onClick={() => onSelectAlerta(alerta.id)}
+                className="relative z-10"
+                onMouseEnter={() => setHoveredId(alerta.id)}
+                onMouseLeave={() => setHoveredId(null)}
               >
                 <motion.div
-                  className={cn(
-                    "w-12 h-12 rounded-full flex items-center justify-center cursor-pointer shadow-lg",
-                    colorClass,
-                    alertaHover === alerta.id && "ring-2 ring-white",
-                  )}
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{
-                    scale: alertaHover === alerta.id ? 1.2 : 1,
-                    opacity: 1,
-                  }}
-                  transition={{
-                    duration: 0.3,
-                    repeat: alertaHover === alerta.id ? 0 : Number.POSITIVE_INFINITY,
-                    repeatType: "reverse",
-                    repeatDelay: 1,
-                  }}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md cursor-pointer relative ${getCategoriaColor(alerta.titulo)}`}
+                  animate={{ scale: isHovered ? 1.2 : 1 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  {getCategoriaIcon(alerta.categoria)}
+                  {getCategoriaIcon(alerta.titulo)}
 
-                  {/* Efecto de pulso */}
-                  <motion.div
-                    className={cn("absolute inset-0 rounded-full", colorClass, "opacity-40")}
-                    initial={{ scale: 1 }}
-                    animate={{ scale: 1.5, opacity: 0 }}
-                    transition={{
-                      duration: 2,
-                      repeat: Number.POSITIVE_INFINITY,
-                      repeatType: "loop",
-                    }}
-                  />
+                  {/* Efecto de pulso/orbe */}
+                  {isHovered && (
+                    <motion.div
+                      className={`absolute inset-0 rounded-full ${getCategoriaColor(alerta.titulo)} opacity-30`}
+                      initial={{ scale: 1 }}
+                      animate={{ scale: 2, opacity: 0 }}
+                      transition={{ duration: 1.5, repeat: Infinity, repeatType: 'loop' }}
+                    />
+                  )}
                 </motion.div>
 
-                {/* Tooltip con información */}
-                {alertaHover === alerta.id && (
-                  <motion.div
-                    className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-64 bg-[#1a1d29]/95 backdrop-blur-sm rounded-lg border border-[#2e3347] p-3 shadow-xl z-10"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
+                {isHovered && (
+                  <div className="absolute z-20 bg-[#1a1d29]/95 border border-[#2e3347] p-3 rounded-lg w-64 shadow-xl top-full mt-2">
                     <div className="flex items-start gap-2 mb-2">
-                      <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", colorClass)}>
-                        {getCategoriaIcon(alerta.categoria)}
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${getCategoriaColor(alerta.titulo)}`}>
+                        {getCategoriaIcon(alerta.titulo)}
                       </div>
                       <div>
                         <h3 className="font-medium text-sm">{alerta.titulo}</h3>
-                        <p className="text-xs text-gray-400">{alerta.ubicacion}</p>
+                        <p className="text-xs text-gray-400">{alerta.direccion}</p>
                       </div>
                     </div>
                     <p className="text-xs text-gray-300 line-clamp-2 mb-2">{alerta.descripcion}</p>
                     <div className="flex items-center justify-between">
-                      <Badge
-                        className={`${alerta.estado === "verificada"
-                          ? "bg-green-500"
-                          : alerta.estado === "urgente"
-                            ? "bg-red-500"
-                            : "bg-yellow-500"
-                          }`}
-                      >
-                        {alerta.estado}
-                      </Badge>
-                      <span className="text-xs text-gray-400">
-                        {alerta.fecha} • {alerta.hora}
-                      </span>
+                      <Badge className="bg-yellow-500">{alerta.estado || 'pendiente'}</Badge>
+                      <span className="text-xs text-gray-400">{alerta.fecha_hora_report?.split(' ')[1]}</span>
                     </div>
-                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-3 h-3 bg-[#1a1d29] border-r border-b border-[#2e3347]"></div>
-                  </motion.div>
+                  </div>
                 )}
               </div>
-            )
-          })}
+            </Marker>
+          );
+        })}
+      </Map>
+    </div>
 
           {/* Leyenda del mapa - Responsive */}
           <div className="absolute bottom-4 left-4 bg-[#1a1d29]/90 backdrop-blur-sm rounded-lg border border-[#2e3347] p-2 md:p-3 max-w-[140px] md:max-w-none">
@@ -418,7 +375,7 @@ const ViewMap = () => {
             <div className="p-4">
               <h2 className="text-xl font-bold mb-4">Reportes Recientes</h2>
               <div className="space-y-3">
-                {reportesRecientes.map((reporte) => (
+                {reportes.map((reporte) => (
                   <motion.div
                     key={reporte.id}
                     className="bg-[#1a1d29]/80 rounded-lg p-3 cursor-pointer hover:bg-[#1a1d29] transition-colors"
@@ -507,7 +464,7 @@ const ViewMap = () => {
                 {/* Reportes recientes - Móvil */}
                 <div className="p-3">
                   <div className="space-y-3">
-                    {reportesRecientes.map((reporte) => (
+                    {reportes.map((reporte) => (
                       <motion.div
                         key={reporte.id}
                         className="bg-[#1a1d29]/80 rounded-lg p-3 cursor-pointer hover:bg-[#1a1d29] transition-colors"
@@ -585,9 +542,6 @@ const ViewMap = () => {
             </motion.div>
           )}
         </AnimatePresence>
-
-
-
       </div>
     </div>
   )

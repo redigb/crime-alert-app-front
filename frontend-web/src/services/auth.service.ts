@@ -12,3 +12,13 @@ export const loginRequest = async (email: String, password: String) => {
 export const logoutRequest = async () => {
     return axios.post('/auth/logout');
 };
+
+
+export const registerUser = async (data: {
+    name: string;
+    email: string;
+    telefono: string;
+    password: string;
+}) => {
+    return await axios.post('/auth/register', data);
+};

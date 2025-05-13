@@ -24,12 +24,11 @@ authApi.interceptors.request.use(config => {
 });
 
 // Manejo automático de errores de autenticación o red
-authApi.interceptors.response.use(
+/*authApi.interceptors.response.use(
     response => response,
     error => {
         const status = error?.response?.status;
 
-        
         if (status === 401 ) {
             console.warn("Token expirado o acceso denegado. Cerrando sesión...");
             useAuthStore.getState().logout();
@@ -45,6 +44,6 @@ authApi.interceptors.response.use(
 
         return Promise.reject(error);
     }
-);
+);*/
 
 export default authApi;

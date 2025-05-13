@@ -18,7 +18,6 @@ const ProfileUser = () => {
 
   const logout = useLogout();
   const updateProfile = useAuthStore((state) => state.setProfile);
-  const getToken = useAuthStore((state) => state.token);
   const getProfile = useAuthStore((state) => state.profile);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -98,8 +97,8 @@ const ProfileUser = () => {
                     </div>
                   )}
                   <div>
-                    <h2 className="text-3xl font-bold text-white">RenzoRd_Redigb</h2>
-                    <p className="text-textSecondary text-sm">redrojo@ejemplo.com</p>
+                    <h2 className="text-3xl font-bold text-white">{getProfile.name}</h2>
+                    <p className="text-textSecondary text-sm">{getProfile.email}</p>
                     <div className="mt-2 flex gap-2 flex-wrap">
                       <span className="bg-gradient-to-r from-green-500 to-green-300 text-black text-xs px-3 py-1 rounded-full font-semibold shadow">
                         Colaborador

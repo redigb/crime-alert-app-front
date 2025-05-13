@@ -1,7 +1,12 @@
-import { ReportsPublished } from "../../components/Reports";
-import { WidgetsStart } from "../../components/Widgets";
+
+import  ReportsPublished  from "./ReportsPublished";
+import  WidgetsStart  from "./WidgetsStart";
+
+
 
 const Inicio = () => {
+
+
   return (
     <main className="min-h-screen text-white p-4 py-6">
       <div className="max-w-full mx-auto">

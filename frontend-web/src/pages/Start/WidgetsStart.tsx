@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { Map } from '@vis.gl/react-maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -9,17 +11,40 @@ import {
     User, AlertTriangle,
     Shield
 } from "../../assets/icons/Icons";
+import { Link } from 'react-router-dom';
+// Service
+import { usersList } from '../../services/users.service';
 
+type user = {
+    id: number;
+    name: string;
+    image_profile: string | null;
+    active: boolean;
+    email: string;
+};
 const WidgetsStart = () => {
 
     // Datos de ejemplo para los widgets
-    const estadisticas = {
+    /*const estadisticas = {
         incidentes_semana: 12,
         robos: 5,
         accidentes: 3,
         incendios: 2,
         otros: 2,
-    }
+    }*/
+
+    // Prepara ñas consultas adecuadas // Busqueda - y Filtrado
+    const [users, setUsers] = useState<user[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const response = await usersList();
+            setUsers(response.data.data); // accede al array real
+            setLoading(false);
+        };
+        fetchUsers();
+    }, []);
 
     const usuarios_activos = [
         { id: 1, username: "carlos_vega", online: true },
@@ -46,7 +71,7 @@ const WidgetsStart = () => {
                 </div>
             </motion.div>
 
-            {/* Estadísticas de Crimen */}
+            {/* Estadísticas de Crimen 
             <motion.div
                 className="bg-[#1a1d29]/80 backdrop-blur-sm rounded-xl border border-[#2e3347]/50 shadow-xl p-4"
                 initial={{ opacity: 0, y: 20 }}
@@ -123,7 +148,7 @@ const WidgetsStart = () => {
                         </div>
                     </div>
                 </div>
-            </motion.div>
+            </motion.div> */}
 
             {/* Botón de Alerta Rápida */}
             <motion.div
@@ -131,14 +156,17 @@ const WidgetsStart = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
             >
-                <Button className="w-full bg-gradient-to-r 
+                <Link to="/reportar">
+
+                    <Button className="w-full bg-gradient-to-r 
                 from-red-500 border-transparent
                  to-red-600 hover:from-red-600
                   hover:to-red-700 text-white h-14 
                   rounded-xl shadow-lg shadow-red-500/20">
-                    <ReportIcon className="h-5 w-5 mr-2" />
-                    Reportar Incidente
-                </Button>
+                        <ReportIcon className="h-5 w-5 mr-2" />
+                        Reportar Incidente
+                    </Button>
+                </Link>
             </motion.div>
 
             {/* Mapa de Incidentes */}
@@ -148,44 +176,46 @@ const WidgetsStart = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
             >
-                <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                        <div className="w-8 h-8 rounded-full bg-[#6c5ce7]/20 flex items-center justify-center">
-                            <MapIcon className="h-4 w-4 text-[#6c5ce7]" />
-                        </div>
-                        <h2 className="text-lg font-semibold">Mapa de Incidentes</h2>
-                    </div>
-                </div>
-
-                <div className="relative h-[200px] bg-[#13151f]">
-                    <div className="absolute inset-0 bg-[url('/placeholder.svg?height=400&width=600')] bg-cover bg-center opacity-50"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-full h-full bg-[#1f1f22] relative">
-                            {/* Mapa real aquí (puede ser react-leaflet, etc.) */}
-                            <Map
-                                initialViewState={{
-                                    longitude: -76.2422,
-                                    latitude: -9.9306,
-                                    zoom: 12
-                                }}
-                                style={{ width: '100%', height: '100%' }}
-                                mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
-                            />;
+                <Link to="/mapa">
+                    <div className="p-4">
+                        <div className="flex items-center gap-2 mb-4">
+                            <div className="w-8 h-8 rounded-full bg-[#6c5ce7]/20 flex items-center justify-center">
+                                <MapIcon className="h-4 w-4 text-[#6c5ce7]" />
+                            </div>
+                            <h2 className="text-lg font-semibold">Mapa de Incidentes</h2>
                         </div>
                     </div>
 
-                    {/* Puntos de ejemplo en el mapa */}
-                    <div className="absolute top-1/4 left-1/3 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                    <div className="absolute top-1/2 left-2/3 w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
-                    <div className="absolute top-3/4 left-1/4 w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-                </div>
+                    <div className="relative h-[200px] bg-[#13151f]">
+                        <div className="absolute inset-0 bg-[url('/placeholder.svg?height=400&width=600')] bg-cover bg-center opacity-50"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-full h-full bg-[#1f1f22] relative">
+                                {/* Mapa real aquí (puede ser react-leaflet, etc.) */}
+                                <Map
+                                    initialViewState={{
+                                        longitude: -76.2422,
+                                        latitude: -9.9306,
+                                        zoom: 12
+                                    }}
+                                    style={{ width: '100%', height: '100%' }}
+                                    mapStyle="https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json"
+                                />;
+                            </div>
+                        </div>
 
-                <div className="p-3 bg-[#13151f]/50">
-                    <Button variant="ghost" className="w-full text-[#6c5ce7] hover:bg-[#6c5ce7]/10 text-sm">
-                        Ver mapa completo
-                        <ChevronRight className="h-4 w-4 ml-1" />
-                    </Button>
-                </div>
+                        {/* Puntos de ejemplo en el mapa */}
+                        <div className="absolute top-1/4 left-1/3 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                        <div className="absolute top-1/2 left-2/3 w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                        <div className="absolute top-3/4 left-1/4 w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
+                    </div>
+
+                    <div className="p-3 bg-[#13151f]/50">
+                        <Button variant="ghost" className="w-full text-[#6c5ce7] hover:bg-[#6c5ce7]/10 text-sm">
+                            Ver mapa completo
+                            <ChevronRight className="h-4 w-4 ml-1" />
+                        </Button>
+                    </div>
+                </Link>
             </motion.div>
 
             {/* Usuarios Activos */}
@@ -203,7 +233,7 @@ const WidgetsStart = () => {
                 </div>
 
                 <div className="space-y-3">
-                    {usuarios_activos.map((usuario) => (
+                    {users.map((usuario) => (
                         <div key={usuario.id} className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 {/*<Avatar className="h-8 w-8 border border-[#2e3347]">
@@ -211,17 +241,17 @@ const WidgetsStart = () => {
                                         {usuario.username.substring(0, 2).toUpperCase()}
                                     </AvatarFallback>
                                 </Avatar> */}
-                                <span className="text-sm">@{usuario.username}</span>
+                                <span className="text-sm">@{usuario.name}</span>
                             </div>
-                            <div className={`w-2 h-2 rounded-full ${usuario.online ? "bg-green-500" : "bg-gray-500"}`}></div>
+                            <div className={`w-2 h-2 rounded-full ${usuario.active ? "bg-green-500" : "bg-gray-500"}`}></div>
                         </div>
                     ))}
                 </div>
 
-                <Button variant="ghost" className="w-full mt-3 text-[#6c5ce7] hover:bg-[#6c5ce7]/10 text-sm">
+                {/*<<Button variant="ghost" className="w-full mt-3 text-[#6c5ce7] hover:bg-[#6c5ce7]/10 text-sm">
                     Ver todos los usuarios
                     <ChevronRight className="h-4 w-4 ml-1" />
-                </Button>
+                </Button>*/}
             </motion.div>
 
             {/* Información de Emergencia */}

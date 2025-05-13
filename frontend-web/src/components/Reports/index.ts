@@ -1,1 +1,1 @@
-export { default as ReportsPublished } from "./ReportsPublished"
+export { default as ReportsPublished } from "../../pages/Start/ReportsPublished"

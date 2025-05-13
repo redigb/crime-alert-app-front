@@ -2,7 +2,6 @@ import { motion } from "motion/react"
 import { ReactNode } from "react"
 
 
-
 function HeaderTitle({ icon, title1, title2, subtitle }
     : {
         icon: ReactNode,

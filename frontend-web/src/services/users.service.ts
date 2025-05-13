@@ -1,7 +1,10 @@
 import axios from './config/axios';
 
-// Falta users Active
+export const usersList = async() =>{
+    return await axios.get('/users');
+}
 
+// Falta users Active
 export const profileRequest = async (name: String) => {
     return await axios.get(`/user/${name}`);
 }

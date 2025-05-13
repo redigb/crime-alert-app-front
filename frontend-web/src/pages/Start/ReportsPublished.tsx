@@ -1,14 +1,33 @@
-import { useState } from "react"
+import { useState, useEffect } from "react";
+
 // components
-import ReporteCard from "./ReportedCard"
+import ReporteCard from "../../components/Reports/ReportedCard"
 import { Chip, Button, Tabs, Menu } from "@material-tailwind/react";
 import { AlertCircle, Filter, ReportIcon, SimpleIcon } from "../../assets/icons/Icons";
 
 import { motion } from "framer-motion";
 // Data - preview
-import { REPORTES_EJEMPLO } from "./dataReport"
-import HeaderTitle from "../HeaderTitle";
+import HeaderTitle from "../../components/HeaderTitle";
 
+import { listReports } from "../../services/reports.service";
+import SpinnerSuspense from "../../components/Statics/Spinner";
+
+type Report = {
+    id: number;
+    estado: string;
+    titulo: string;
+    descripcion: string;
+    direccion: string;
+    fecha_hora_report: string;
+    image: string | null;
+    video: string | null;
+    user: {
+        id: number;
+        name: string;
+        image_profile: string | null;
+    };
+    // ...otros campos si los usas
+};
 
 
 const ReportsPublished = () => {
@@ -28,7 +47,7 @@ const ReportsPublished = () => {
             case "resuelto":
                 return <Chip className="bg-green-500 hover:bg-green-600"><Chip.Label>Resuelto</Chip.Label></Chip>
             default:
-                return <Chip className="bg-yellow-500 hover:bg-yellow-600"><Chip.Label>Pendiente</Chip.Label></Chip>
+                return <Chip className="bg-yellow-500 hover:bg-yellow-600"><Chip.Label>Nuevo</Chip.Label></Chip>
         }
     }
 
@@ -44,6 +63,21 @@ const ReportsPublished = () => {
                 return <AlertCircle className="h-5 w-5 text-blue-500" />
         }
     }
+
+    // Prepara ñas consultas adecuadas // Busqueda - y Filtrado
+    const [reportes, setReportes] = useState<Report[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchReportes = async () => {
+            const data = await listReports();
+            setReportes(data);
+            setLoading(false);
+        };
+        fetchReportes();
+    }, []);
+
+    if (loading) return <SpinnerSuspense />;
 
 
     return (
@@ -85,9 +119,9 @@ const ReportsPublished = () => {
                 <Tabs.List className="flex gap-2 bg-[#1a1d29]/80 border border-[#2e3347]/50 p-1 rounded-lg">
                     {[
                         { label: "Todos", value: "todos" },
-                        { label: "Robos", value: "robos" },
-                        { label: "Accidentes", value: "accidentes" },
-                        { label: "Incendio", value: "incendio" },
+                        { label: "Nuevos", value: "nuevo" },
+                        { label: "Urgente", value: "urgente" },
+                        { label: "Verificado", value: "verificado" },
                         { label: "Otros", value: "otros" },
                     ].map((tab) => (
                         <Tabs.Trigger
@@ -105,7 +139,7 @@ const ReportsPublished = () => {
                 </Tabs.List>
                 <Tabs.Panel value="todos" className="mt-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {REPORTES_EJEMPLO.map((reporte, index) => (
+                        {reportes.map((reporte, index) => (
                             <ReporteCard
                                 key={reporte.id}
                                 reporte={reporte}
@@ -118,9 +152,9 @@ const ReportsPublished = () => {
                         ))}
                     </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="robos">
-                    <div className="space-y-6">
-                        {REPORTES_EJEMPLO.filter((r) => r.categoria.toLowerCase() === "robo").map((reporte, index) => (
+                <Tabs.Panel value="nuevo">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {reportes.filter((r) => r.estado.toLowerCase() === "nuevo").map((reporte, index) => (
                             <ReporteCard
                                 key={reporte.id}
                                 reporte={reporte}
@@ -133,31 +167,35 @@ const ReportsPublished = () => {
                         ))}
                     </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="accidentes">
-                    {REPORTES_EJEMPLO.filter((r) => r.categoria.toLowerCase() === "accidente").map((reporte, index) => (
-                        <ReporteCard
-                            key={reporte.id}
-                            reporte={reporte}
-                            index={index}
-                            expandedReporte={expandedReporte}
-                            toggleExpand={toggleExpand}
-                            getEstadoBadge={getEstadoBadge}
-                            getCategoriaIcon={getCategoriaIcon}
-                        />
-                    ))}
+                <Tabs.Panel value="urgente">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {reportes.filter((r) => r.estado.toLowerCase() === "urgente").map((reporte, index) => (
+                            <ReporteCard
+                                key={reporte.id}
+                                reporte={reporte}
+                                index={index}
+                                expandedReporte={expandedReporte}
+                                toggleExpand={toggleExpand}
+                                getEstadoBadge={getEstadoBadge}
+                                getCategoriaIcon={getCategoriaIcon}
+                            />
+                        ))}
+                    </div>
                 </Tabs.Panel>
-                <Tabs.Panel value="incendio">
-                    {REPORTES_EJEMPLO.filter((r) => r.categoria.toLowerCase() === "incendio").map((reporte, index) => (
-                        <ReporteCard
-                            key={reporte.id}
-                            reporte={reporte}
-                            index={index}
-                            expandedReporte={expandedReporte}
-                            toggleExpand={toggleExpand}
-                            getEstadoBadge={getEstadoBadge}
-                            getCategoriaIcon={getCategoriaIcon}
-                        />
-                    ))}
+                <Tabs.Panel value="verificado">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {reportes.filter((r) => r.estado.toLowerCase() === "verificado").map((reporte, index) => (
+                            <ReporteCard
+                                key={reporte.id}
+                                reporte={reporte}
+                                index={index}
+                                expandedReporte={expandedReporte}
+                                toggleExpand={toggleExpand}
+                                getEstadoBadge={getEstadoBadge}
+                                getCategoriaIcon={getCategoriaIcon}
+                            />
+                        ))}
+                    </div>
                 </Tabs.Panel>
                 <Tabs.Panel value="otros">
                     <div className="p-8 text-center text-gray-400">
