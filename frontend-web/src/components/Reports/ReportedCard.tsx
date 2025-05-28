@@ -147,23 +147,8 @@ export default function ReporteCard({
                                 size="sm"
                                 className="text-gray-400 hover:text-white hover:bg-[#2e3347]/50 rounded-lg"
                             >
-                                <Like className="h-4 w-4 mr-1.5" />
-                                <span className="text-xs">{reporte.likes}</span>
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-gray-400 hover:text-white hover:bg-[#2e3347]/50 rounded-lg"
-                            >
                                 <Eye className="h-4 w-4 mr-1.5" />
                                 <span className="text-xs">{reporte.vistas}</span>
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-gray-400 hover:text-white hover:bg-[#2e3347]/50 rounded-lg"
-                            >
-                                <Share className="h-4 w-4" />
                             </Button>
                         </div>
                     </div>

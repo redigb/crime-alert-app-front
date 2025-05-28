@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 // Value-Zustand
 import { useAuthStore } from "../store/auth";
 // My Components
-import  { AppLayout } from "../layout";
+import { AppLayout, PublicLayout } from "../layout";
 import SpinnerSuspense from "../components/Statics/Spinner";
 
 export const AppRouter = () => {
@@ -15,20 +15,21 @@ export const AppRouter = () => {
 
   return (
     <Routes>
-      {
-        routesPublic.map((route: any, index: number) => (
-          <Route key={index} path={route.path} element={route.element} />
-        ))
-      }
-      <Route element={<ProtectedRoute isAllowed={isAuth} />}>
 
+      <Route element={<PublicLayout />}>
+        {routesPublic.map((route: any, index: number) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+      </Route>
+
+      <Route element={<ProtectedRoute isAllowed={isAuth} />}>
         <Route element={<AppLayout />}>
           {
             routesApp.map((route: any, index: number) => (
               <Route key={index} path={route.path} element={
                 <Suspense fallback={<SpinnerSuspense />}>
                   {route.element}
-                </Suspense>}/>
+                </Suspense>} />
             ))
           }
         </Route>

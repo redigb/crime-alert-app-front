@@ -4,7 +4,7 @@ import { useAuthStore } from "../../store/auth";
 // cambia segun el arranque "dev" // "prod"
 //const isDev = import.meta.env.MODE === "development";
 
-const baseURL = "https://crimen-alert-be-production.up.railway.app/api/";
+const baseURL = import.meta.env.VITE_TESTING_URL;
 
 // Aotomatic conect - backend with axios
 const authApi = axios.create({
